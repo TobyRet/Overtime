@@ -1,3 +1,9 @@
+<% if @post.errors.any? %>
+  <% @post.errors.full_messages.each do |error| %>
+    <%= js add_gritter(error, title: "Overtime App Notification", sticky: false) %>
+  <% end %>
+<% end %>
+
 <%= form_for @post, class: 'form-horizontal' do |f| %>
   <div class='form-group' >
     <%= f.label :date %>
