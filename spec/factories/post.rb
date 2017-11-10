@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :post do
     date Date.today
     rationale 'Some rationale'
+    status 'approved'
     user
   end
 
