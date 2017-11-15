@@ -3,8 +3,8 @@ require 'rails_helper'
 describe 'navigate' do
   before do
     logout(:user)
-    user = FactoryBot.create(:user) 
-    login_as(user, scope: :user)
+    @user = FactoryBot.create(:user) 
+    login_as(@user, scope: :user)
   end
   j
   describe 'index' do
@@ -21,6 +21,17 @@ describe 'navigate' do
 
       expect(page).to have_content(/Rationale|rationale/)
     end
+
+    it 'has a scope so that only post creators can see their posts' do
+      other_user = User.create(first_name: 'b', last_name: 'c', email: 'p@p.com', password: 'asdfasdf', password_confirmation: 'asdfasdf')
+      post1 = Post.create(date: Date.today, rationale: 'bleh', user_id: @user.id)
+      post2 = Post.create(date: Date.today, rationale: 'bleh', user_id: @user.id)
+      post_from_other_user = Post.create(date: Date.today, rationale: 'This post should not be seenh', user_id: other_user.id)
+
+      visit posts_path
+
+      expect(page).to_not have_content(/This post should not be seen/)
+    end
   end
 
   describe 'new' do
@@ -34,7 +45,9 @@ describe 'navigate' do
 
   describe 'delete' do
     it 'can be deleted' do
+      # TODO - fix this
       post = FactoryBot.create(:post)
+      post.update(user_id: @user.id)
       visit posts_path
 
       click_link("delete_post_#{post.id}_from_index")
