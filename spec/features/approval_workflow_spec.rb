@@ -2,13 +2,13 @@ require 'rails_helper'
 
 describe 'Navigate' do
   before do 
-    @admin_user = FactoryGirl.create(:admin_user)
+    @admin_user = FactoryBot.create(:admin_user)
     login_as(@admin_user, :scope => :user)
   end
 
   describe 'edit' do
     before do
-      @post = FactoryGirl.create(:post)
+      @post = FactoryBot.create(:post)
       visit edit_post_path(@post)
     end
 
@@ -20,7 +20,7 @@ describe 'Navigate' do
 
     it 'cannot be added by a non admin' do
       logout :user
-      @user = FactoryGirl.create(:user)
+      @user = FactoryBot.create(:user)
       login_as(@user, :scope => :user)
 
       visit edit_post_path(@post)

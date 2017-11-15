@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe User, type: :model do
     before :each do
-      @user = FactoryGirl.create(:user) 
+      @user = FactoryBot.create(:user) 
     end
 
   describe 'creation' do

@@ -4,8 +4,8 @@ describe Post, type: :model do
   describe 'Creation' do
 
     before do
-      @user = FactoryGirl.create(:user)
-      @post = FactoryGirl.create(:post) 
+      @user = FactoryBot.create(:user)
+      @post = FactoryBot.create(:post) 
     end
 
     it 'can be created' do

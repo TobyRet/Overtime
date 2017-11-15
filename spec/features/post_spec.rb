@@ -2,24 +2,20 @@ require 'rails_helper'
 
 describe 'navigate' do
   before do
-    @user = FactoryGirl.create(:user) 
-    login_as(@user, scope: :user)
+    logout(:user)
+    user = FactoryBot.create(:user) 
+    login_as(user, scope: :user)
   end
-
+  j
   describe 'index' do
-    it 'can be reached successfully' do
-      visit posts_path
-      expect(page.status_code).to eq(200)
-    end
-
     it 'has a title of Posts' do
       visit posts_path
       expect(page).to have_content(/Posts/) 
     end
 
     it 'has a list of posts' do
-      post1 = FactoryGirl.build_stubbed(:post) 
-      post2 = FactoryGirl.build_stubbed(:second_post)
+      post1 = FactoryBot.build_stubbed(:post) 
+      post2 = FactoryBot.build_stubbed(:second_post)
 
       visit posts_path
 
@@ -28,7 +24,7 @@ describe 'navigate' do
   end
 
   describe 'new' do
-    it ' has a link from the homepage' do
+    it 'has a link from the homepage' do
       visit root_path
 
       click_link('new_post_from_nav')
@@ -38,10 +34,10 @@ describe 'navigate' do
 
   describe 'delete' do
     it 'can be deleted' do
-      @post = FactoryGirl.create(:post)
+      post = FactoryBot.create(:post)
       visit posts_path
 
-      click_link("delete_post_#{@post.id}_from_index")
+      click_link("delete_post_#{post.id}_from_index")
       expect(page.status_code).to eq(200)
     end
   end
@@ -74,27 +70,32 @@ describe 'navigate' do
   end
 
   describe 'edit' do
-
     before do
-      @post = FactoryGirl.create(:post)
+      logout(:user)
+      @editor = User.create!(first_name: 't', last_name: 'p', email: 'p@p.com', password: 'asdfasdf', password_confirmation: 'asdfasdf')
+      @post = Post.create(date: Date.today, rationale: 'pants', user_id: @editor.id)
+      login_as(@editor, scope: :user)
     end
 
-    it 'can be reached by clicking edit on the inde page' do
-      visit posts_path
-
-      click_link "edit_#{@post.id}"
-
-      expect(page.status_code).to eq(200)
-    end
-
-    it 'an be edited' do
-      visit edit_post_path @post
+    it 'can be edited' do
+      visit edit_post_path(@post)
 
       fill_in 'post[date]', with: Date.today
       fill_in 'post[rationale]', with: 'Edited content'
       click_on 'Save'
 
       expect(page).to have_content('Edited content')
+    end
+
+    it 'cannot be edited by a non authorised user' do
+      logout(:user)
+
+      non_authorised_user = FactoryBot.create(:non_authorised_user)
+      login_as(non_authorised_user, scope: :user)
+
+      visit edit_post_path @post
+
+      expect(current_path).to eq(root_path)
     end
   end
 end
