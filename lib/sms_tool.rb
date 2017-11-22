@@ -1,4 +1,4 @@
-module SmsTool
+module SMSTool
   def self.send_sms(number:, message:)
     puts'Sending SMS'
     puts "#{message} to #{number}"
