@@ -2,7 +2,7 @@
 
 puts 'User has been created'
 
-AdminUser.create!(email: 'admin@admin.com', password: 'asdfasdf', password_confirmation: 'asdfasdf', first_name: 'Admin', last_name: 'User')
+AdminUser.create!(email: 'admin@admin.com', phone_number: '0794324567', password: 'asdfasdf', password_confirmation: 'asdfasdf', first_name: 'Admin', last_name: 'User')
 
 puts 'Admin user has been created'
 
