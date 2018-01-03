@@ -1,8 +1,10 @@
 @import 'bootstrap-sprockets';
 @import 'bootstrap';
-@import 'posts.scss';
 @import 'gritter';
 @import 'bourbon';
+@import 'posts.scss';
+@import 'audit_logs.scss';
+@import 'admin_homepage.css';
 
 .custom-nav {
   margin-top: 75px;
